@@ -1,18 +1,18 @@
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
-let ballRadius = 10;
+let ballRadius = 8;
 let x = canvas.width / 2;
 let y = canvas.height - 30;
 let dx = 2;
 let dy = -2;
 let paddleHeight = 10;
-let paddleWidth = 75;
+let paddleWidth = 80;
 let paddleX = (canvas.width - paddleWidth) / 2;
 let rightPressed = false;
 let leftPressed = false;
 let brickRowCount = 3;
-let brickColumnCount = 5;
-let brickWidth = 75;
+let brickColumnCount = 6;
+let brickWidth = 62;
 let brickHeight = 20;
 let brickPadding = 10;
 let brickOffsetTop = 30;
@@ -21,10 +21,10 @@ let bricks = [];
 let score = 0;
 let lives = 3;
 
-for (let c = 0; c < brickColumnCount; c++) {
-    bricks[c] = [];
-    for (let r = 0; r < brickRowCount; r++) {
-        bricks[c][r] = { x: 0, y: 0, status: 1 };
+for (let column = 0; column < brickColumnCount; column++) {
+    bricks[column] = [];
+    for (let row = 0; row < brickRowCount; row++) {
+        bricks[column][row] = { x: 0, y: 0, status: 1 };
     }
 }
 
@@ -50,11 +50,11 @@ function keyUpHandler(e) {
 }
 
 function collisionDetection() {
-    for (let c = 0; c < brickColumnCount; c++) {
-        for (let r = 0; r < brickRowCount; r++) {
-            let b = bricks[c][r];
+    for (let column = 0; column < brickColumnCount; column++) {
+        for (let row = 0; row < brickRowCount; row++) {
+            let b = bricks[column][row];
             if (b.status == 1) {
-                if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+                if (x > b.x && x < b.x + brickWidth+ballRadius && y > b.y && y < b.y + brickHeight+ballRadius) {
                     dy = -dy;
                     b.status = 0;
                     score++;
@@ -97,13 +97,13 @@ function drawPaddle() {
 }
 
 function drawBricks() {
-    for (let c = 0; c < brickColumnCount; c++) {
-        for (let r = 0; r < brickRowCount; r++) {
-            if (bricks[c][r].status == 1) {
-                let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-                let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
-                bricks[c][r].x = brickX;
-                bricks[c][r].y = brickY;
+    for (let column = 0; column < brickColumnCount; column++) {
+        for (let row = 0; row < brickRowCount; row++) {
+            if (bricks[column][row].status == 1) {
+                let brickX = (column * (brickWidth + brickPadding)) + brickOffsetLeft;
+                let brickY = (row * (brickHeight + brickPadding)) + brickOffsetTop;
+                bricks[column][row].x = brickX;
+                bricks[column][row].y = brickY;
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickWidth, brickHeight);
                 ctx.fillStyle = "blue";
@@ -123,33 +123,30 @@ function draw() {
     drawLives();
     collisionDetection();
 
-    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
-        dx = -dx;
+    if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
+      dx = -dx;
     }
-    if (y + dy < ballRadius) {
+    if(y + dy < ballRadius) {
+      dy = -dy;
+    }
+    else if(y + dy > canvas.height-ballRadius) {
+      if(x > paddleX && x < paddleX + paddleWidth) {
         dy = -dy;
-    }
-    else if (y + dy > canvas.height - ballRadius) {
-        if (x > paddleX && x < paddleX + paddleWidth) {
-            if (y = y - paddleHeight) {
-                dy = -dy;
-            }
+      }
+      else {
+        lives--;
+        if(!lives) {
+          alert("GAME OVER");
+          document.location.reload();
         }
         else {
-            lives--;
-            if (!lives) {
-                alert("GAME OVER...");
-                document.location.reload();
-                requestAnimationFrame(draw);
-            }
-            else {
-                x = canvas.width / 2;
-                y = canvas.height - 30;
-                dx = 2;
-                dy = -2;
-                paddleX = (canvas.width - paddleWidth) / 2;
-            }
+          x = canvas.width/2;
+          y = canvas.height-30;
+          dx = 3;
+          dy = -3;
+          paddleX = (canvas.width-paddleWidth)/2;
         }
+      }
     }
 
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
