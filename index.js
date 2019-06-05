@@ -1,22 +1,22 @@
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
-let ballRadius = 8;
+let ballRadius = 16;
 let x = canvas.width / 2;
-let y = canvas.height - 30;
-let dx = 2;
-let dy = -2;
-let paddleHeight = 10;
-let paddleWidth = 80;
+let y = canvas.height - 60;
+let dx = 4;
+let dy = -4;
+let paddleHeight = 20;
+let paddleWidth = 160;
 let paddleX = (canvas.width - paddleWidth) / 2;
 let rightPressed = false;
 let leftPressed = false;
-let brickRowCount = 3;
+let brickRowCount = 4;
 let brickColumnCount = 6;
-let brickWidth = 62;
-let brickHeight = 20;
-let brickPadding = 10;
-let brickOffsetTop = 30;
-let brickOffsetLeft = 30;
+let brickWidth = 124;
+let brickHeight = 35;
+let brickPadding = 20;
+let brickOffsetTop = 60;
+let brickOffsetLeft = 60;
 let bricks = [];
 let score = 0;
 let lives = 3;
@@ -54,7 +54,7 @@ function collisionDetection() {
         for (let row = 0; row < brickRowCount; row++) {
             let b = bricks[column][row];
             if (b.status == 1) {
-                if (x > b.x && x < b.x + brickWidth+ballRadius && y > b.y && y < b.y + brickHeight+ballRadius) {
+                if (x > b.x && x < b.x + brickWidth + ballRadius && y > b.y && y < b.y + brickHeight + ballRadius) {
                     dy = -dy;
                     b.status = 0;
                     score++;
@@ -130,23 +130,23 @@ function draw() {
       dy = -dy;
     }
     else if(y + dy > canvas.height-ballRadius) {
-      if(x > paddleX && x < paddleX + paddleWidth) {
-        dy = -dy;
-      }
-      else {
-        lives--;
-        if(!lives) {
-          alert("GAME OVER");
-          document.location.reload();
+        if(x > paddleX && x < paddleX + paddleWidth) {
+            dy = -dy;
         }
         else {
-          x = canvas.width/2;
-          y = canvas.height-30;
-          dx = 3;
-          dy = -3;
-          paddleX = (canvas.width-paddleWidth)/2;
+            lives--;
+            if(!lives) {
+                alert("GAME OVER");
+                document.location.reload();
+            }
+            else {
+                x = canvas.width/2;
+                y = canvas.height-30;
+                dx = 3;
+                dy = -3;
+                paddleX = (canvas.width-paddleWidth)/2;
+            }
         }
-      }
     }
 
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
