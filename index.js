@@ -1,6 +1,6 @@
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
-let ballRadius = 16;
+let ballRadius = 12;
 let x = canvas.width / 2;
 let y = canvas.height - 60;
 let dx = 4;
@@ -13,7 +13,7 @@ let leftPressed = false;
 let brickRowCount = 4;
 let brickColumnCount = 6;
 let brickWidth = 124;
-let brickHeight = 35;
+let brickHeight = 30;
 let brickPadding = 20;
 let brickOffsetTop = 60;
 let brickOffsetLeft = 60;
@@ -69,13 +69,13 @@ function collisionDetection() {
 }
 
 function drawLives() {
-    ctx.font = "16px Arial";
+    ctx.font = "20px Times New Roman";
     ctx.fillStyle = "red";
-    ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
+    ctx.fillText("Lives: " + lives, canvas.width - 78, 20);
 }
 
 function drawScore() {
-    ctx.font = "16px Arial";
+    ctx.font = "20px Times New Roman";
     ctx.fillStyle = "red";
     ctx.fillText("Score: " + score, 8, 20);
 }
@@ -91,7 +91,7 @@ function drawBall() {
 function drawPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = "red";
     ctx.fill();
     ctx.closePath();
 }
@@ -136,7 +136,7 @@ function draw() {
         else {
             lives--;
             if(!lives) {
-                alert("GAME OVER");
+                alert("SORRY....GAME OVER");
                 document.location.reload();
             }
             else {
@@ -150,10 +150,10 @@ function draw() {
     }
 
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
-        paddleX += 7;
+        paddleX += 9;
     }
     else if (leftPressed && paddleX > 0) {
-        paddleX -= 7;
+        paddleX -= 9;
     }
 
     x += dx;
